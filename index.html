@@ -113,6 +113,13 @@
                     <a class="text-white pl-2" href="">
                         <i class="fab fa-youtube"></i>
                     </a>
+                    <!-- Módulo del clima Paraguay -->
+                    <div id="weather-widget" style="margin-left:20px; color:#fff; display:inline-flex; align-items:center;">
+                        <span id="weather-location" style="font-weight:bold;"></span>
+                        <span id="weather-desc" style="margin-left:5px;"></span>
+                        <span id="weather-temp" style="margin-left:10px;"></span>
+                        <img id="weather-icon" style="vertical-align:middle;display:none;margin-left:5px;" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -1187,8 +1194,8 @@
     </div>
     <script>
     // filepath: c:\Users\deposito.danesa\Documents\NetBeansProjects\DomoPy\index.html
-    const apiKey = "a7693d1c43120ed2af5736581649d02f"; // Reemplaza con tu API key válida
-    const city = "San Antonio,py";
+    const apiKey = "a7693d1c43120ed2af5736581649d02f";
+    const city = "Asuncion,py";
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=es`;
     
     fetch(url)
