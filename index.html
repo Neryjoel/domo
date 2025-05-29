@@ -1067,18 +1067,18 @@
             const div = document.createElement('div');
             div.className = 'slider-item';
             div.innerHTML = `
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <img src="${slide.img}" alt="${slide.title}">
-          </div>
-          <div class="flip-back">
-            <h5>${slide.title}</h5>
-            <p>${slide.desc}</p>
-          </div>
-        </div>
-      </div>
-    `;
+            <div class="flip-card">
+                <div class="flip-inner">
+                <div class="flip-front">
+                    <img src="${slide.img}" alt="${slide.title}">
+                </div>
+                <div class="flip-back">
+                    <h5>${slide.title}</h5>
+                    <p>${slide.desc}</p>
+                </div>
+                </div>
+            </div>
+            `;
             return div;
         }
 
@@ -1178,6 +1178,14 @@
             startAutoSlide();
         });
     </script>
+
+    <!-- Módulo del clima Paraguay -->
+    <div id="weather-widget" style="margin-bottom: 30px;">
+        <span id="weather-location" style="font-weight:bold;"></span>
+        <span id="weather-desc"></span>
+        <span id="weather-temp" style="margin-left:10px;"></span>
+        <img id="weather-icon" style="vertical-align:middle;display:none;" />
+    </div>
 </body>
 
 </html>
