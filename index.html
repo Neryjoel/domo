@@ -1178,37 +1178,6 @@
             startAutoSlide();
         });
     </script>
-        <!-- Módulo del clima Paraguay -->
-    <div id="weather-widget" style="margin-bottom: 30px;">
-        <span id="weather-location" style="font-weight:bold;"></span>
-        <span id="weather-desc"></span>
-        <span id="weather-temp" style="margin-left:10px;"></span>
-        <img id="weather-icon" style="vertical-align:middle;display:none;" />
-    </div>
-    <script>
-    // filepath: c:\Users\deposito.danesa\Documents\NetBeansProjects\DomoPy\index.html
-    const apiKey = "a7693d1c43120ed2af5736581649d02f";
-    const city = "Asuncion,py";
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=es`;
-    
-    fetch(url)
-      .then(res => {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.json();
-      })
-      .then(data => {
-        if (data.cod !== 200) throw new Error(data.message || "Error de datos");
-        document.getElementById('weather-location').textContent = data.name + ":";
-        document.getElementById('weather-desc').textContent = data.weather[0].description;
-        document.getElementById('weather-temp').textContent = Math.round(data.main.temp) + "°C";
-        document.getElementById('weather-icon').src = `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
-        document.getElementById('weather-icon').style.display = "inline";
-      })
-      .catch((err) => {
-        document.getElementById('weather-widget').textContent = "No se pudo cargar el clima.";
-        console.error("Error al cargar el clima:", err);
-      });
-    </script>
 </body>
 
 </html>
