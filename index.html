@@ -70,44 +70,27 @@
             }
         }
 
-        .bubbles {
+        /* Mascota animada */
+        #mascota-movil {
             position: fixed;
-            width: 100vw;
-            height: 100vh;
-            top: 0;
-            left: 0;
+            left: -100px;
+            bottom: 20px;
+            z-index: 9999;
             pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
+            animation: mascota-caminar 18s linear infinite;
         }
 
-        .bubbles span {
-            position: absolute;
-            bottom: -120px;
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 102, 161, 0.15);
-            border-radius: 50%;
-            left: calc(100vw * var(--i) / 30);
-            animation: bubbleUp 12s linear infinite;
-            animation-delay: calc(-1s * var(--i));
-            filter: blur(1px);
-        }
-
-        @keyframes bubbleUp {
+        @keyframes mascota-caminar {
             0% {
-                transform: translateY(0) scale(1);
-                opacity: 0.7;
+                left: -100px;
             }
 
             50% {
-                opacity: 1;
-                transform: translateY(-50vh) scale(1.2);
+                left: calc(100vw - 100px);
             }
 
             100% {
-                transform: translateY(-110vh) scale(0.8);
-                opacity: 0;
+                left: -100px;
             }
         }
     </style>
@@ -115,20 +98,6 @@
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="90">
-    <!-- Burbujas animadas -->
-    <div class="bubbles">
-        <span style="--i:11"></span>
-        <span style="--i:17"></span>
-        <span style="--i:25"></span>
-        <span style="--i:14"></span>
-        <span style="--i:22"></span>
-        <span style="--i:19"></span>
-        <span style="--i:13"></span>
-        <span style="--i:28"></span>
-        <span style="--i:16"></span>
-        <span style="--i:24"></span>
-    </div>
-
 
     <!-- WhatsApp Button Start -->
     <a href="https://wa.me/595986170999" class="whatsapp-button" target="_blank">
@@ -1233,6 +1202,11 @@
             startAutoSlide();
         });
     </script>
+
+    <!-- Mascota animada -->
+    <div id="mascota-movil">
+        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Mascota" style="height:80px;">
+    </div>
 </body>
 
 </html>
