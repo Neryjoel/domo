@@ -1188,22 +1188,23 @@
     canvas.width = w;
     canvas.height = h;
 
-    // Criatura: cuerpo con tentáculos animados
-    const creature = {
-        x: w * 0.2,
+    // Parámetros de la criatura
+    const base = {
+        x: w * 0.5,
         y: h - 120,
-        r: 40,
-        tentacles: [],
-        color: '#00bcd4'
+        r: 48,
+        color: "#00bcd4"
     };
 
-    // Crear tentáculos
-    for (let i = 0; i < 8; i++) {
-        let angle = Math.PI + (i / 7) * Math.PI;
-        creature.tentacles.push({
-            angle,
-            length: 60 + Math.random() * 30,
-            phase: Math.random() * Math.PI * 2
+    // Tentáculos abstractos
+    const tentacles = [];
+    const tentacleCount = 12;
+    for (let i = 0; i < tentacleCount; i++) {
+        tentacles.push({
+            angle: (Math.PI * 2 * i) / tentacleCount,
+            length: 70 + Math.random() * 40,
+            phase: Math.random() * Math.PI * 2,
+            speed: 0.7 + Math.random() * 0.6
         });
     }
 
@@ -1212,84 +1213,71 @@
 
         // Sombra
         ctx.save();
-        ctx.globalAlpha = 0.2;
+        ctx.globalAlpha = 0.18;
         ctx.beginPath();
-        ctx.ellipse(creature.x, creature.y + creature.r + 20, creature.r * 1.2, 18, 0, 0, Math.PI * 2);
+        ctx.ellipse(base.x, base.y + base.r + 24, base.r * 1.3, 22, 0, 0, Math.PI * 2);
         ctx.fillStyle = "#222";
         ctx.fill();
         ctx.restore();
 
         // Tentáculos
-        creature.tentacles.forEach((tent, i) => {
+        tentacles.forEach((tent, i) => {
             ctx.save();
             ctx.beginPath();
-            ctx.moveTo(creature.x, creature.y + creature.r * 0.7);
-            let segments = 18;
+            ctx.moveTo(base.x, base.y + base.r * 0.7);
+            let segments = 22;
             for (let j = 1; j <= segments; j++) {
                 let progress = j / segments;
-                let angle = tent.angle + Math.sin(t / 800 + tent.phase + j * 0.2) * 0.25 * (1 - progress);
-                let len = tent.length * progress * (1 + 0.1 * Math.sin(t / 400 + tent.phase + j));
-                let px = creature.x + Math.cos(angle) * len;
-                let py = creature.y + creature.r * 0.7 + Math.sin(angle) * len + progress * 20;
+                let wave = Math.sin(t * 0.001 * tent.speed + tent.phase + j * 0.25) * (1 - progress) * 18;
+                let angle = tent.angle + wave / 120;
+                let len = tent.length * progress * (1 + 0.08 * Math.sin(t * 0.001 + tent.phase + j));
+                let px = base.x + Math.cos(angle) * len;
+                let py = base.y + base.r * 0.7 + Math.sin(angle) * len + progress * 18;
                 ctx.lineTo(px, py);
             }
-            ctx.strokeStyle = "#0097a7";
-            ctx.lineWidth = 7 - i * 0.4;
+            ctx.strokeStyle = `rgba(0,180,220,0.38)`;
+            ctx.lineWidth = 6 - i * 0.18;
             ctx.lineCap = "round";
             ctx.globalAlpha = 0.7;
+            ctx.shadowColor = "#00bcd4";
+            ctx.shadowBlur = 8;
             ctx.stroke();
             ctx.restore();
         });
 
-        // Cuerpo
+        // Cuerpo abstracto (sin rostro)
         ctx.save();
         ctx.beginPath();
-        ctx.arc(creature.x, creature.y, creature.r, Math.PI, Math.PI * 2, false);
-        ctx.bezierCurveTo(
-            creature.x + creature.r, creature.y + creature.r * 1.2,
-            creature.x - creature.r, creature.y + creature.r * 1.2,
-            creature.x - creature.r, creature.y
-        );
+        let points = [];
+        let blobPoints = 18;
+        for (let i = 0; i < blobPoints; i++) {
+            let angle = (Math.PI * 2 * i) / blobPoints;
+            let radius = base.r + Math.sin(t * 0.001 + angle * 2 + Math.cos(t * 0.0012 + angle * 3)) * 7;
+            let px = base.x + Math.cos(angle) * radius;
+            let py = base.y + Math.sin(angle) * radius;
+            points.push([px, py]);
+        }
+        ctx.moveTo(points[0][0], points[0][1]);
+        for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i][0], points[i][1]);
+        }
         ctx.closePath();
-        ctx.fillStyle = creature.color;
+        ctx.fillStyle = base.color;
         ctx.shadowColor = "#00bcd4";
         ctx.shadowBlur = 18;
+        ctx.globalAlpha = 0.92;
         ctx.fill();
-        ctx.restore();
-
-        // Ojos
-        let blink = Math.abs(Math.sin(t / 1200));
-        ctx.save();
-        ctx.beginPath();
-        ctx.ellipse(creature.x - 13, creature.y - 8, 7, 10 * blink, 0, 0, Math.PI * 2);
-        ctx.ellipse(creature.x + 13, creature.y - 8, 7, 10 * blink, 0, 0, Math.PI * 2);
-        ctx.fillStyle = "#fff";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(creature.x - 13, creature.y - 8, 2, 0, Math.PI * 2);
-        ctx.arc(creature.x + 13, creature.y - 8, 2, 0, Math.PI * 2);
-        ctx.fillStyle = "#222";
-        ctx.fill();
-        ctx.restore();
-
-        // Boca
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(creature.x, creature.y + 10, 10, 0, Math.PI, false);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "#222";
-        ctx.globalAlpha = 0.5 + 0.5 * Math.sin(t / 700);
-        ctx.stroke();
         ctx.restore();
     }
 
     // Animación y movimiento
     let dir = 1;
     function animate(t) {
-        // Movimiento horizontal suave
-        creature.x += dir * 0.5 + Math.sin(t / 800) * 0.2;
-        if (creature.x > w * 0.8) dir = -1;
-        if (creature.x < w * 0.2) dir = 1;
+        // Movimiento horizontal suave y flotante
+        base.x += dir * 0.45 + Math.sin(t / 1200) * 0.18;
+        base.y = h - 120 + Math.sin(t / 900) * 10;
+        if (base.x > w * 0.8) dir = -1;
+        if (base.x < w * 0.2) dir = 1;
         drawCreature(t);
         requestAnimationFrame(animate);
     }
@@ -1299,7 +1287,7 @@
         h = window.innerHeight;
         canvas.width = w;
         canvas.height = h;
-        creature.y = h - 120;
+        base.y = h - 120;
     });
 
     animate(0);
